@@ -465,17 +465,37 @@ function when_calendar_event_updated($updateevent, $changetype) {
 
     $enabledoptionskey = 'local_reminders_enable_'.strtolower($event->eventtype).'forcalevents';
     if (!isset($CFG->$enabledoptionskey) || !$CFG->$enabledoptionskey) {
+        if (debugging()) {
+            error_log(vsprintf('[LOCAL REMINDERS][DEBUG]: %s enabledoptionskey: %s return', [
+                __FUNCTION__,
+                var_export($enabledoptionskey, true)
+            ]));
+        }
         return;
     }
 
     $currtime = time();
     $diffsecondsuntil = $event->timestart - $currtime;
     if ($diffsecondsuntil < 0) {
+        if (debugging()) {
+            error_log(vsprintf('[LOCAL REMINDERS][DEBUG]: %s diffsecondsuntil < 0 event.timestart: %s currtime: %s $diffsecondsuntil: %s', [
+                __FUNCTION__,
+                $event->timestart,
+                $currtime,
+                $diffsecondsuntil
+            ]));
+        }
         return;
     }
     $aheadday = floor($diffsecondsuntil / (REMINDERS_DAYIN_SECONDS * 1.0));
 
     if (is_mod_event($event) && !is_mod_reminders_enabled($event->modulename)) {
+        if (debugging()) {
+            error_log(vsprintf('[LOCAL REMINDERS][DEBUG]: %s is_mod_reminders_enabled =  event->modulename: %s', [
+                __FUNCTION__,
+                $event->modulename
+            ]));
+        }
         return;
     }
 
@@ -529,6 +549,11 @@ function when_calendar_event_updated($updateevent, $changetype) {
     }
 
     if ($reminderref == null) {
+        if (debugging()) {
+            error_log(vsprintf('[LOCAL REMINDERS][DEBUG]: %s $reminderref == null', [
+                __FUNCTION__,
+            ]));
+        }
         return;
     }
 
