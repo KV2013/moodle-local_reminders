@@ -60,17 +60,17 @@ class local_reminders_coursesettings_edit_form extends moodleform {
         $mform->addElement('advcheckbox', 'status_activities',
             get_string('dueheading', 'local_reminders'),
             get_string('enabled', 'local_reminders'));
-        $mform->setDefault('status_activities', 1);
+        $mform->setDefault('status_activities', 0);
 
         $mform->addElement('advcheckbox', 'status_course',
             get_string('courseheading', 'local_reminders'),
             get_string('enabled', 'local_reminders'));
-        $mform->setDefault('status_course', 1);
+        $mform->setDefault('status_course', 0);
 
         $mform->addElement('advcheckbox', 'status_group',
             get_string('groupheading', 'local_reminders'),
             get_string('enabled', 'local_reminders'));
-        $mform->setDefault('status_group', 1);
+        $mform->setDefault('status_group', 0);
 
         $mform->addElement('hidden', 'courseid');
         $mform->setType('courseid', PARAM_INT);
