@@ -606,3 +606,15 @@ function local_reminders_extend_settings_navigation($settingsnav, $context) {
         $settingnode->add_node($navnode);
     }
 }
+
+function local_reminders_mtrace_wrapper($string, $eol) {
+    error_log($string);
+
+    if (defined('STDOUT') && !PHPUNIT_TEST && !defined('BEHAT_TEST')) {
+        fwrite(STDOUT, $string.$eol);
+    } else {
+        echo $string . $eol;
+    }
+
+    flush();
+}
