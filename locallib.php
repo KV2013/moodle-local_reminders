@@ -944,3 +944,54 @@ class reminder_ref {
         }
     }
 }
+
+/**
+ * Вернёт true если для курса включены оповещения курсов
+ * @param int $courseid
+ * @return bool
+ */
+function is_course_reminders_enabled(int $courseid): bool {
+    global $DB;
+
+    $coursesettings = $DB->get_record('local_reminders_course', ['courseid' => $courseid]);
+    if (!isset($coursesettings->status_course)) {
+        return false;
+    }
+
+    return (bool) $coursesettings->status_course;
+}
+
+/**
+ * Вернёт false если для указанного модуля были отключены оповещения
+ *
+ * @param string $modname {@see table modules}
+ * @return bool
+ */
+function is_mod_reminders_enabled($modname) {
+    global $CFG;
+
+    if (
+        isset($CFG->local_reminders_enable_modreminders)
+        && false === (bool) $CFG->local_reminders_enable_modreminders
+    ) {// Любые напоминания связаные с модулями курса отключены
+        return false;
+    }
+
+    $excludedmodules = [];
+    if (isset($CFG->local_reminders_excludedmodulenames)) {
+        $excludedmodules = explode(',', $CFG->local_reminders_excludedmodulenames);
+    }
+
+    return !in_array($modname, $excludedmodules);
+}
+
+/**
+ * Вернёт true если $event связан с модулем курса
+ * @param \calendar_event $event
+ * @return bool
+ */
+function is_mod_event(\calendar_event $event) {
+    $corepluginmanager = \core_plugin_manager::instance();
+    $modplugins = $corepluginmanager->get_plugins_of_type('mod');
+    return in_array($event->modulename, array_keys($modplugins));
+}
