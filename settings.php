@@ -86,6 +86,10 @@ if ($hassiteconfig) {
         }
     }
 
+    $settings->add(new admin_setting_configcheckbox('local_reminders_enable_modreminders',
+            get_string('enabledmodreminders', 'local_reminders'),
+            get_string('enabledmodremindersdescription', 'local_reminders'), 0));
+
     $settings->add(new admin_setting_configmultiselect('local_reminders_excludedmodulenames',
             get_string('excludedmodules', 'local_reminders'),
             get_string('excludedmodulesdesc', 'local_reminders'),

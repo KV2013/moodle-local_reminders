@@ -127,3 +127,5 @@ $string['siteheading'] = 'Site Event Reminders';
 $string['taskreminder'] = 'Reminders Task';
 $string['titlesubjectprefix'] = 'Reminder';
 $string['userheading'] = 'User Event Reminders';
+$string['enabledmodreminders'] = 'Включить оповещения для моудлей курса';
+$string['enabledmodremindersdescription'] = 'Если отключить эту настройку, то напоминания связанные с событиями элементов курса не будут рассылаться';
