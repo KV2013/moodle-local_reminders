@@ -629,13 +629,18 @@ function local_reminders_extend_settings_navigation($settingsnav, $context) {
     }
 }
 
-function local_reminders_mtrace_wrapper($string, $eol) {
+/**
+ * Залогирует все сообщения переданные в {@see mtrace()}
+ * @param string $string
+ */
+function local_reminders_log_mtrace_wrapper($string, $eol) {
     error_log($string);
 
+    // @see mtrace()
     if (defined('STDOUT') && !PHPUNIT_TEST && !defined('BEHAT_TEST')) {
         fwrite(STDOUT, $string.$eol);
     } else {
-        echo $string . $eol;
+        echo s($string . $eol);
     }
 
     flush();

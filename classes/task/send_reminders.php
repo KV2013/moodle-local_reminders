@@ -46,8 +46,12 @@ class send_reminders extends \core\task\scheduled_task {
      */
     public function execute() {
         global $CFG;
-        if (debugging()) {
-            $CFG->mtrace_wrapper = 'local_reminders_mtrace_wrapper';
+
+        if (
+            debugging()
+            || true === (bool) get_config('local_reminders', 'debug_send_reminders_task') // Enable debugging in prod
+        ) {
+            $CFG->mtrace_wrapper = 'local_reminders_log_mtrace_wrapper';
         }
         local_reminders_cron_task();
     }
