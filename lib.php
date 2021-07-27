@@ -169,10 +169,6 @@ function local_reminders_cron_pre($currtime, $timewindowstart) {
     mtrace("   [Local Reminder] Found ".count($upcomingevents)." upcoming events. Continuing...");
 
     $fromuser = get_from_user();
-    $excludedmodules = array();
-    if (isset($CFG->local_reminders_excludedmodulenames)) {
-        $excludedmodules = explode(',', $CFG->local_reminders_excludedmodulenames);
-    }
 
     $explicitactivityenable = isset($CFG->local_reminders_explicitenable)
         && $CFG->local_reminders_explicitenable;
@@ -180,14 +176,13 @@ function local_reminders_cron_pre($currtime, $timewindowstart) {
     $allemailfailed = true;
     $triedcount = 0;
     foreach ($upcomingevents as $event) {
-        if (in_array($event->modulename, $excludedmodules)) {
+        $event = new calendar_event($event);
+        if (is_mod_event($event) && !is_mod_reminders_enabled($event->modulename)) {
             mtrace("  [Local Reminder] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             mtrace("  [Local Reminder]   Skipping event #$event->id in excluded module '$event->modulename'!");
             mtrace("  [Local Reminder] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             continue;
         }
-
-        $event = new calendar_event($event);
 
         $aheadday = 0;
         $diffinseconds = $event->timestart - $timewindowend;
@@ -452,6 +447,12 @@ function when_calendar_event_updated($updateevent, $changetype) {
 
     // Not allowed to continue.
     if (has_denied_for_events($changetype)) {
+        if (debugging()) {
+            error_log(vsprintf('[LOCAL REMINDERS][DEBUG]: %s has_denied_for_events changetype: %s', [
+                __FUNCTION__,
+                var_export($changetype, true)
+            ]));
+        }
         return;
     }
 
@@ -474,11 +475,7 @@ function when_calendar_event_updated($updateevent, $changetype) {
     }
     $aheadday = floor($diffsecondsuntil / (REMINDERS_DAYIN_SECONDS * 1.0));
 
-    $excludedmodules = array();
-    if (isset($CFG->local_reminders_excludedmodulenames)) {
-        $excludedmodules = explode(',', $CFG->local_reminders_excludedmodulenames);
-    }
-    if (in_array($event->modulename, $excludedmodules)) {
+    if (is_mod_event($event) && !is_mod_reminders_enabled($event->modulename)) {
         return;
     }
 

@@ -183,16 +183,11 @@ function send_overdue_activity_reminders($curtime, $timewindowstart, $activityro
         return;
     }
 
-    $excludedmodules = array();
-    if (isset($CFG->local_reminders_excludedmodulenames)) {
-        $excludedmodules = explode(',', $CFG->local_reminders_excludedmodulenames);
-    }
-
     mtrace('[LOCAL REMINDERS] Number of expired events found for this cron cycle: '.count($allexpiredevents));
     foreach ($allexpiredevents as $event) {
         $event = new calendar_event($event);
 
-        if (in_array($event->modulename, $excludedmodules)) {
+        if (is_mod_event($event) && !is_mod_reminders_enabled($event->modulename)) {
             mtrace("  [Local Reminder] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             mtrace("  [Local Reminder]   Skipping overdue event #$event->id in excluded module '$event->modulename'!");
             mtrace("  [Local Reminder] xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
@@ -397,8 +392,7 @@ function process_course_event($event, $aheadday, $courseroleids=null, $showtrace
         return null;
     }
 
-    $coursesettings = $DB->get_record('local_reminders_course', array('courseid' => $event->courseid));
-    if (isset($coursesettings->status_course) && $coursesettings->status_course == 0) {
+    if (!is_course_reminders_enabled((int) $event->courseid)) {
         $showtrace && mtrace("  [Local Reminder] Reminders for course events has been restricted.");
         return null;
     }
