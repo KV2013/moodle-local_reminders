@@ -645,3 +645,55 @@ function local_reminders_log_mtrace_wrapper($string, $eol) {
 
     flush();
 }
+
+/**
+ * @return void
+ */
+function local_reminders_set_settings_only_course_reminders() {
+
+    $corepluginmanager = core_plugin_manager::instance();
+    $formatplugins = $corepluginmanager->get_plugins_of_type('mod');
+    $modnames = implode(',', array_keys($formatplugins));
+    $rdaysdisabled = '000';
+    $rdaysenabled = '111';
+    $coursecustom = 10800;
+
+    set_config('local_reminders_messagetitleprefix', 'Напоминание');
+    set_config('local_reminders_sendas', REMINDERS_SEND_AS_NO_REPLY);
+    set_config('local_reminders_sendasname', 'do.academyit.ru');
+    set_config('local_reminders_courserdays', $rdaysenabled);
+    set_config('local_reminders_coursecustom', $coursecustom);
+    set_config('local_reminders_enable_modreminders', false);
+    set_config('local_reminders_siterdays', $rdaysdisabled);
+    set_config('local_reminders_sitecustom', 0);
+    set_config('local_reminders_userrdays', $rdaysdisabled);
+    set_config('local_reminders_usercustom', 0);
+    set_config('local_reminders_courseroles', '0010100000000');
+    set_config('local_reminders_duecustom', 0);
+    set_config('local_reminders_enable_whenremoved', 0);
+    set_config('local_reminders_enable_siteforcalevents', 0);
+    set_config('local_reminders_enable_userforcalevents', 0);
+    set_config('local_reminders_noremindersforcompleted', 1);
+    set_config('local_reminders_overduewarnprefix', 'ПРОСРОЧЕНО');
+    set_config('local_reminders_overduewarnmessage', 'Это задание просрочено!');
+    set_config('local_reminders_enable_dueforcalevents', 0);
+    set_config('local_reminders_showmodnameintitle', 1);
+    set_config('local_reminders_enable_groupforcalevents', 0);
+    set_config('local_reminders_category_noforcompleted', 1);
+    set_config('local_reminders_categorycustom', 0);
+    set_config('local_reminders_enable_categoryforcalevents', 0);
+    set_config('local_reminders_filterevents', REMINDERS_SEND_ONLY_VISIBLE);
+    set_config('local_reminders_excludedmodulenames', $modnames);
+    set_config('local_reminders_enable_whenchanged', 1);
+    set_config('local_reminders_enable_courseforcalevents', 1);
+    set_config('local_reminders_enableoverdueactivityreminders', 0);
+    set_config('local_reminders_duerdays', $rdaysdisabled);
+    set_config('local_reminders_activityroles', '0000000000000');
+    set_config('local_reminders_grouprdays', $rdaysdisabled);
+    set_config('local_reminders_categoryrdays', $rdaysdisabled);
+    set_config('local_reminders_categoryroles', '0000000000000');
+    set_config('local_reminders_explicitenable', 0);
+    set_config('local_reminders_groupcustom', 0);
+    set_config('local_reminders_enable_modreminders', 0);
+    set_config('local_reminders_enable_whenadded', 1);
+}

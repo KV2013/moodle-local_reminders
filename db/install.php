@@ -24,6 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once dirname(__DIR__) . '/lib.php';
 /**
  * Post-install code for the reminders plugin.
  *
@@ -34,5 +35,6 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_local_reminders_install() {
 
     // What should be done when the plugin is installed for the first time.
+    local_reminders_set_settings_only_course_reminders();
 
 }
