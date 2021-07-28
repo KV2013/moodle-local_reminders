@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 // $plugin->version   = 2021062000;        // v2.4
-$plugin->version   = 2021062001;        // academyit_v24
+$plugin->version   = 2021062002;        // academyit_v24
 $plugin->requires  = 2017051504;        // Require moodle 3.3.4 or higher.
 $plugin->release   = '2.4-academyit.ru';
 $plugin->maturity  = MATURITY_RC;
